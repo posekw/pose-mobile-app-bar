@@ -1,0 +1,96 @@
+:root {
+    --pmab-safe-area: env(safe-area-inset-bottom, 0px);
+    /* Defaults - will be overridden by inline styles */
+    --pmab-height: 65px;
+    --pmab-bg-rgba: rgba(255, 255, 255, 0.85);
+    --pmab-blur: 10px;
+    --pmab-text-color: #9ca3af;
+    --pmab-active-color: #2563eb;
+}
+
+#pmab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--pmab-height) + var(--pmab-safe-area));
+    background: var(--pmab-bg-rgba);
+    backdrop-filter: blur(var(--pmab-blur));
+    -webkit-backdrop-filter: blur(var(--pmab-blur));
+    display: none;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 9999999;
+    padding-bottom: var(--pmab-safe-area);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.pmab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--pmab-text-color) !important;
+    flex: 1;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pmab-item span.dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pmab-item span.label {
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Active State */
+.pmab-item.active {
+    color: var(--pmab-active-color) !important;
+}
+
+.pmab-item.active span.dashicons {
+    transform: translateY(-2px);
+}
+
+/* Active Indicator Dot (Optional style) */
+.pmab-item.active::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 30%;
+    width: 4px;
+    height: 4px;
+    background: var(--pmab-active-color);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+/* Responsive Visibility */
+@media screen and (max-width: 768px) {
+    #pmab-bar {
+        display: flex;
+    }
+
+    body {
+        padding-bottom: calc(var(--pmab-height) + var(--pmab-safe-area) + 5px) !important;
+    }
+
+    body.pmab-native-mode header,
+    body.pmab-native-mode footer,
+    body.pmab-native-mode #copyright {
+        display: none !important;
+    }
+}

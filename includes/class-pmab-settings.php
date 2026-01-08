@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * Handle admin settings and UI
+ *
+ * @package    Pose_Mobile_App_Bar
+ * @subpackage Pose_Mobile_App_Bar/includes
+ */
+class Pmab_Settings
+{
+
+    public function init()
+    {
+        add_action('admin_init', [$this, 'register_settings']);
+        add_action('admin_menu', [$this, 'add_admin_menu']);
+    }
+
+    public function register_settings()
+    {
+        register_setting('pmab_settings_group', 'pmab_enable');
+        register_setting('pmab_settings_group', 'pmab_native_mode');
+        register_setting('pmab_settings_group', 'pmab_hide_selectors');
+
+        // Design
+        register_setting('pmab_settings_group', 'pmab_bg_color');
+        register_setting('pmab_settings_group', 'pmab_text_color');
+        register_setting('pmab_settings_group', 'pmab_active_color');
+        register_setting('pmab_settings_group', 'pmab_blur_amount');
+        register_setting('pmab_settings_group', 'pmab_opacity');
+        register_setting('pmab_settings_group', 'pmab_height');
+
+        // Menu Items (1-5)
+        for ($i = 1; $i <= 5; $i++) {
+            register_setting('pmab_settings_group', "pmab_item_{$i}_icon");
+            register_setting('pmab_settings_group', "pmab_item_{$i}_label");
+            register_setting('pmab_settings_group', "pmab_item_{$i}_url");
+        }
+    }
+
+    public function add_admin_menu()
+    {
+        add_options_page(
+            'App Bar Settings',
+            'Mobile App Bar',
+            'manage_options',
+            'pose-mobile-app-bar',
+            [$this, 'render_settings_page']
+        );
+    }
+
+    public function render_settings_page()
+    {
+        // Enqueue admin styles just for this page. 
+        // Ideally we would use wp_enqueue_style on 'admin_enqueue_scripts' hook with a page check.
+        // But keeping it simple for now, we will link it or inline read it.
+        // Better practice: separate proper enqueue.
+        wp_enqueue_style('pmab-admin-css', plugins_url('../assets/css/admin.css', __FILE__));
+
+        ?>
+        <div class="pmab-wrap">
+            <form method="post" action="options.php">
+                <?php settings_fields('pmab_settings_group'); ?>
+
+                <div class="pmab-header">
+                    <h1>📱 Mobile App Bar <span class="pmab-badge">v3.1</span></h1>
+                </div>
+
+                <!-- GENERAL SETTINGS -->
+                <div class="pmab-card">
+                    <div class="pmab-section-title">General Settings</div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Enable App Bar</div>
+                        <div class="pmab-input-group">
+                            <label class="switch">
+                                <input type="checkbox" name="pmab_enable" value="1" <?php checked(1, get_option('pmab_enable'), true); ?> />
+                                <span style="margin-left: 10px;">Activate on mobile devices</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Native App Mode 🚀</div>
+                        <div class="pmab-input-group">
+                            <input type="checkbox" name="pmab_native_mode" value="1" <?php checked(1, get_option('pmab_native_mode'), true); ?> />
+                            <span style="margin-left: 10px;">Hide default Header & Footer on mobile</span>
+                            <p class="pmab-help">Makes your site feel like a real app by removing web elements.</p>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Hide Selectors</div>
+                        <div class="pmab-input-group">
+                            <textarea name="pmab_hide_selectors" rows="2"
+                                placeholder=".site-header, .site-footer, #copyright"><?php echo esc_attr(get_option('pmab_hide_selectors', 'header, footer')); ?></textarea>
+                            <p class="pmab-help">CSS selectors to hide when Native Mode is ON. <b>Remove 'header' from here to
+                                    show the Logo.</b></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESIGN SETTINGS -->
+                <div class="pmab-card">
+                    <div class="pmab-section-title">Glassmorphism Design</div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Background Color</div>
+                        <div class="pmab-input-group">
+                            <input type="color" name="pmab_bg_color"
+                                value="<?php echo esc_attr(get_option('pmab_bg_color', '#ffffff')); ?>" />
+                            <span style="vertical-align: super; margin-left:10px;">(With transparency works best)</span>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Blur Amount</div>
+                        <div class="pmab-input-group">
+                            <input type="range" name="pmab_blur_amount" min="0" max="20"
+                                value="<?php echo esc_attr(get_option('pmab_blur_amount', '10')); ?>"
+                                oninput="this.nextElementSibling.value = this.value" />
+                            <output><?php echo esc_attr(get_option('pmab_blur_amount', '10')); ?></output>px
+                            <p class="pmab-help">Controls the "Frosted Glass" effect intensity.</p>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Glass Opacity</div>
+                        <div class="pmab-input-group">
+                            <input type="range" name="pmab_opacity" min="0.1" max="1.0" step="0.05"
+                                value="<?php echo esc_attr(get_option('pmab_opacity', '0.85')); ?>"
+                                oninput="this.nextElementSibling.value = Math.round(this.value * 100) + '%'" />
+                            <output><?php echo round(floatval(get_option('pmab_opacity', '0.85')) * 100); ?>%</output>
+                            <p class="pmab-help">Controls how transparent the background color is.</p>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Bar Height</div>
+                        <div class="pmab-input-group">
+                            <input type="number" name="pmab_height" min="50" max="100"
+                                value="<?php echo esc_attr(get_option('pmab_height', '65')); ?>" style="width: 80px;" /> px
+                            <p class="pmab-help">Height of the bottom bar in pixels (Default: 65).</p>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Icon Color</div>
+                        <div class="pmab-input-group">
+                            <input type="color" name="pmab_text_color"
+                                value="<?php echo esc_attr(get_option('pmab_text_color', '#9ca3af')); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Active Color</div>
+                        <div class="pmab-input-group">
+                            <input type="color" name="pmab_active_color"
+                                value="<?php echo esc_attr(get_option('pmab_active_color', '#2563eb')); ?>" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU ITEMS -->
+                <div class="pmab-card">
+                    <div class="pmab-section-title">Menu Items (Max 5)</div>
+                    <p class="pmab-help" style="margin-bottom: 20px;">Use <a
+                            href="https://developer.wordpress.org/resource/dashicons/" target="_blank">Dashicons</a> classes
+                        (e.g. <code>dashicons-admin-home</code>) or FontAwesome.</p>
+
+                    <?php
+                    $defaults = [
+                        1 => ['label' => 'Home', 'icon' => 'dashicons-admin-home'],
+                        2 => ['label' => 'Gallery', 'icon' => 'dashicons-format-gallery'],
+                        3 => ['label' => 'Cart', 'icon' => 'dashicons-cart'],
+                        4 => ['label' => 'Contact', 'icon' => 'dashicons-email'],
+                        5 => ['label' => 'Account', 'icon' => 'dashicons-admin-users'],
+                    ];
+                    for ($i = 1; $i <= 5; $i++):
+                        $val_label = get_option("pmab_item_{$i}_label");
+                        $val_icon = get_option("pmab_item_{$i}_icon");
+
+                        // placeholder logic
+                        $ph_label = $defaults[$i]['label'];
+                        $ph_icon = $defaults[$i]['icon'];
+                        ?>
+                        <div class="pmab-menu-item">
+                            <div class="pmab-menu-item-header">Item #<?php echo $i; ?></div>
+                            <div class="pmab-grid-item">
+                                <div>
+                                    <label style="font-size:12px; font-weight:600;">Label</label>
+                                    <input type="text" name="pmab_item_<?php echo $i; ?>_label"
+                                        placeholder="<?php echo $ph_label; ?>" value="<?php echo esc_attr($val_label); ?>" />
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:600;">Icon Class</label>
+                                    <input type="text" name="pmab_item_<?php echo $i; ?>_icon" placeholder="<?php echo $ph_icon; ?>"
+                                        value="<?php echo esc_attr($val_icon); ?>" />
+                                </div>
+                                <div>
+                                    <label style="font-size:12px; font-weight:600;">Link URL</label>
+                                    <input type="text" name="pmab_item_<?php echo $i; ?>_url" placeholder="/"
+                                        value="<?php echo esc_attr(get_option("pmab_item_{$i}_url")); ?>" />
+                                </div>
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+
+                <div class="pmab-save-bar">
+                    <span>⚠️ Don't forget to save changes!</span>
+                    <input type="submit" name="submit" id="submit" class="button" value="Save Settings">
+                </div>
+            </form>
+        </div>
+        <?php
+    }
+}
