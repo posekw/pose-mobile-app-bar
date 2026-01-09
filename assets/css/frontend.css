@@ -93,4 +93,9 @@
     body.pmab-native-mode #copyright {
         display: none !important;
     }
+
+    /* Hide Header Bottom specifically */
+    [class*="ct-header"] [data-row="bottom"] {
+        display: none !important;
+    }
 }
