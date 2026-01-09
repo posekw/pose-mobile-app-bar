@@ -61,9 +61,7 @@
     color: var(--pmab-active-color) !important;
 }
 
-.pmab-item.active span.dashicons {
-    transform: translateY(-2px);
-}
+/* Removed translateY animation to keep icon centered */
 
 /* Active Indicator Dot (Optional style) */
 .pmab-item.active::after {
