@@ -23,6 +23,8 @@
     z-index: 9999999;
     padding-bottom: var(--pmab-safe-area);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
