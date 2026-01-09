@@ -44,6 +44,7 @@ class Pmab_Settings
         register_setting('pmab_settings_group', 'pmab_height');
         register_setting('pmab_settings_group', 'pmab_bg_color');
         register_setting('pmab_settings_group', 'pmab_bg_opacity');
+        register_setting('pmab_settings_group', 'pmab_blur');
         register_setting('pmab_settings_group', 'pmab_text_color');
         register_setting('pmab_settings_group', 'pmab_label_color');
         register_setting('pmab_settings_group', 'pmab_icon_label_spacing');
