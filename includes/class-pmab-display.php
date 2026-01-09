@@ -206,10 +206,6 @@ class Pmab_Display
                     elseif (!$is_home && $item_path != '/' && $current_path == $item_path) {
                         $is_active = true;
                     }
-                    // 3. Fallback: check if current URL contains the item path (for complex URLs)
-                    elseif (!$is_home && $item_path != '/' && strpos($current_path, $item_path) === 0) {
-                        $is_active = true;
-                    }
 
                     $active_class = $is_active ? 'active' : '';
                     $item_index_class = 'pmab-item-' . $i;
@@ -221,7 +217,7 @@ class Pmab_Display
                 }
             }
             ?>
-                </div>
-                <?php
+        </div>
+        <?php
     }
 }
