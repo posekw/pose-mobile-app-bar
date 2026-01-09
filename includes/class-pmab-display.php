@@ -11,6 +11,11 @@ class Pmab_Display
 
     public function init()
     {
+        // Prevent execution in admin area
+        if (is_admin()) {
+            return;
+        }
+
         add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
         add_action('wp_footer', [$this, 'render_bar']);
     }
@@ -32,13 +37,13 @@ class Pmab_Display
     private function inject_dynamic_css()
     {
         $bg_color = get_option('pmab_bg_color', '#ffffff');
-        $bg_opacity = get_option('pmab_bg_opacity', 85) / 100;
+        $bg_opacity = (float) get_option('pmab_bg_opacity', 85) / 100;
         $text_color = get_option('pmab_text_color', '#9ca3af');
         $active_color = get_option('pmab_active_color', '#2563eb');
-        $blur = get_option('pmab_blur', 10);
-        $height = get_option('pmab_height', 65);
+        $blur = (int) get_option('pmab_blur', 10);
+        $height = (int) get_option('pmab_height', 65);
         $label_color = get_option('pmab_label_color', $text_color);
-        $icon_label_spacing = get_option('pmab_icon_label_spacing', '0');
+        $icon_label_spacing = (int) get_option('pmab_icon_label_spacing', '0');
 
         $separator_color = get_option('pmab_separator_color', '#e5e7eb');
         $hex = str_replace('#', '', $bg_color);

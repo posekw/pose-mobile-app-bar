@@ -33,7 +33,6 @@ class Pmab_Settings
     {
         register_setting('pmab_settings_group', 'pmab_enable');
         register_setting('pmab_settings_group', 'pmab_native_mode');
-        register_setting('pmab_settings_group', 'pmab_native_mode');
         register_setting('pmab_settings_group', 'pmab_hide_selectors');
 
         // Accessibility / Visibility
