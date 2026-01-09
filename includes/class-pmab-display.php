@@ -34,6 +34,7 @@ class Pmab_Display
         $text_color = get_option('pmab_text_color', '#9ca3af');
         $label_color = get_option('pmab_label_color', $text_color); // Fallback to text_color
         $active_color = get_option('pmab_active_color', '#2563eb');
+        $separator_color = get_option('pmab_separator_color', '#e5e7eb');
         $blur = get_option('pmab_blur_amount', '10');
         $opacity = get_option('pmab_opacity', '0.85');
         $height = get_option('pmab_height', '65');
@@ -60,7 +61,19 @@ class Pmab_Display
             --pmab-text-color: {$text_color};
             --pmab-label-color: {$label_color};
             --pmab-active-color: {$active_color};
+            --pmab-separator-color: {$separator_color};
         }";
+
+        // Separators Logic
+        if (get_option('pmab_enable_separators')) {
+            $custom_css .= "
+            .pmab-item {
+                border-right: 1px solid var(--pmab-separator-color);
+            }
+            .pmab-item:last-child {
+                border-right: none;
+            }";
+        }
 
         // Visibility Logic (Native Mode + Checkboxes)
         $hide_selectors = [];

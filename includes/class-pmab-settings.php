@@ -46,6 +46,11 @@ class Pmab_Settings
         register_setting('pmab_settings_group', 'pmab_text_color');
         register_setting('pmab_settings_group', 'pmab_label_color'); // New Label Color
         register_setting('pmab_settings_group', 'pmab_active_color');
+        
+        // Separators
+        register_setting('pmab_settings_group', 'pmab_enable_separators');
+        register_setting('pmab_settings_group', 'pmab_separator_color');
+
         register_setting('pmab_settings_group', 'pmab_blur_amount');
         register_setting('pmab_settings_group', 'pmab_opacity');
         register_setting('pmab_settings_group', 'pmab_height');
@@ -211,6 +216,19 @@ class Pmab_Settings
                         <div class="pmab-input-group">
                             <input type="color" name="pmab_active_color"
                                 value="<?php echo esc_attr(get_option('pmab_active_color', '#2563eb')); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Separators</div>
+                        <div class="pmab-input-group">
+                             <label class="switch" style="display:block; margin-bottom:5px;">
+                                <input type="checkbox" name="pmab_enable_separators" value="1" <?php checked(1, get_option('pmab_enable_separators'), true); ?> />
+                                <span style="margin-left: 10px;">Show dividers between items</span>
+                            </label>
+                            <input type="color" name="pmab_separator_color"
+                                value="<?php echo esc_attr(get_option('pmab_separator_color', '#e5e7eb')); ?>" 
+                                style="margin-top:5px;"/>
                         </div>
                     </div>
                 </div>
