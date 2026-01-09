@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Pose Mobile App Bar
  * Description: A premium, native-app like bottom navigation bar for WordPress. Features Glassmorphism design and easy customization.
- * Version: 3.5.7
+ * Version: 3.6.0
  * Author: Pose Media
  * Author URI: https://posemedia.sa
  * Text Domain: pose-mobile-app-bar
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define Constants
-define('PMAB_VERSION', '3.5.7');
+define('PMAB_VERSION', '3.6.0');
 define('PMAB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PMAB_PLUGIN_URL', plugin_dir_url(__FILE__));
 

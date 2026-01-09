@@ -36,16 +36,17 @@ class Pmab_Display
 
     private function inject_dynamic_css()
     {
-        $bg_color = get_option('pmab_bg_color', '#ffffff');
-        $bg_opacity = (float) get_option('pmab_bg_opacity', 85) / 100;
-        $text_color = get_option('pmab_text_color', '#9ca3af');
-        $active_color = get_option('pmab_active_color', '#2563eb');
-        $blur = (int) get_option('pmab_blur', 10);
-        $height = (int) get_option('pmab_height', 65);
+        // Premium Dark Theme Defaults
+        $bg_color = get_option('pmab_bg_color', '#0f172a');  // Dark navy
+        $bg_opacity = (float) get_option('pmab_bg_opacity', 80) / 100;
+        $text_color = get_option('pmab_text_color', 'rgba(255, 255, 255, 0.7)');
+        $active_color = get_option('pmab_active_color', '#3b82f6');  // Blue
+        $blur = (int) get_option('pmab_blur', 20);
+        $height = (int) get_option('pmab_height', 70);
         $label_color = get_option('pmab_label_color', $text_color);
-        $icon_label_spacing = (int) get_option('pmab_icon_label_spacing', '0');
+        $icon_label_spacing = (int) get_option('pmab_icon_label_spacing', '4');
 
-        $separator_color = get_option('pmab_separator_color', '#e5e7eb');
+        $separator_color = get_option('pmab_separator_color', 'rgba(255, 255, 255, 0.1)');
         $hex = str_replace('#', '', $bg_color);
         if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));

@@ -1,33 +1,53 @@
 :root {
     --pmab-safe-area: env(safe-area-inset-bottom, 0px);
     /* Defaults - will be overridden by inline styles */
-    --pmab-height: 65px;
-    --pmab-bg-rgba: rgba(255, 255, 255, 0.85);
-    --pmab-blur: 10px;
-    --pmab-text-color: #9ca3af;
-    --pmab-active-color: #2563eb;
+    --pmab-height: 70px;
+    --pmab-bg-rgba: rgba(15, 23, 42, 0.8);
+    --pmab-blur: 20px;
+    --pmab-text-color: rgba(255, 255, 255, 0.7);
+    --pmab-active-color: #3b82f6;
+    --pmab-icon-label-spacing: 4px;
 }
 
 #pmab-bar {
+    /* Positioning - Floating with margins */
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(var(--pmab-height) + var(--pmab-safe-area));
+    bottom: 20px;
+    left: 15px;
+    right: 15px;
+    width: auto;
+    max-width: 500px;
+    margin: 0 auto;
+
+    /* Size */
+    height: var(--pmab-height);
+    padding: 10px 15px;
+    padding-bottom: calc(10px + var(--pmab-safe-area));
+
+    /* Background - Dark Glassmorphism */
     background: var(--pmab-bg-rgba);
-    backdrop-filter: blur(var(--pmab-blur));
-    -webkit-backdrop-filter: blur(var(--pmab-blur));
+    backdrop-filter: blur(var(--pmab-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--pmab-blur)) saturate(180%);
+
+    /* Shape - Full rounded corners */
+    border-radius: 25px;
+    overflow: hidden;
+
+    /* Border & Shadow */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+    /* Layout */
     display: none;
     justify-content: space-around;
     align-items: center;
     z-index: 9999999;
-    padding-bottom: var(--pmab-safe-area);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+
+    /* Animation */
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .pmab-item {
@@ -41,42 +61,47 @@
     height: 100%;
     position: relative;
     cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 12px;
     -webkit-tap-highlight-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.pmab-item:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .pmab-item span.dashicons {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    /* margin-bottom controlled by inline CSS variable */
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--pmab-icon-label-spacing);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .pmab-item span.label {
     font-family: -apple-system, system-ui, sans-serif;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.3px;
+    color: var(--pmab-text-color);
 }
 
 /* Active State */
 .pmab-item.active {
+    background: rgba(59, 130, 246, 0.15);
     color: var(--pmab-active-color) !important;
 }
 
-/* Removed translateY animation to keep icon centered */
+.pmab-item.active span.dashicons {
+    color: var(--pmab-active-color);
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+    transform: scale(1.05);
+}
 
-/* Active Indicator Dot (Optional style) */
-.pmab-item.active::after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    right: 30%;
-    width: 4px;
-    height: 4px;
-    background: var(--pmab-active-color);
-    border-radius: 50%;
-    opacity: 0;
+.pmab-item.active span.label {
+    color: var(--pmab-active-color);
 }
 
 /* Responsive Visibility */
@@ -86,7 +111,7 @@
     }
 
     body {
-        padding-bottom: calc(var(--pmab-height) + var(--pmab-safe-area) + 5px) !important;
+        padding-bottom: calc(var(--pmab-height) + var(--pmab-safe-area) + 30px) !important;
     }
 
     body.pmab-native-mode header,
@@ -94,4 +119,33 @@
     body.pmab-native-mode #copyright {
         display: none !important;
     }
+}
+
+/* Small screens */
+@media (max-width: 375px) {
+    #pmab-bar {
+        left: 10px;
+        right: 10px;
+        bottom: 15px;
+        height: 65px;
+        padding: 8px 10px;
+    }
+
+    .pmab-item span.dashicons {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+    }
+
+    .pmab-item span.label {
+        font-size: 10px;
+    }
+}
+
+/* Separator styles */
+.pmab-separator {
+    width: 1px;
+    height: 40%;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 4px;
 }
