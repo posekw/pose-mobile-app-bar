@@ -32,6 +32,7 @@ class Pmab_Display
     private function inject_dynamic_css()
     {
         $text_color = get_option('pmab_text_color', '#9ca3af');
+        $label_color = get_option('pmab_label_color', $text_color); // Fallback to text_color
         $active_color = get_option('pmab_active_color', '#2563eb');
         $blur = get_option('pmab_blur_amount', '10');
         $opacity = get_option('pmab_opacity', '0.85');
@@ -57,6 +58,7 @@ class Pmab_Display
             --pmab-bg-rgba: {$rgba_bg};
             --pmab-blur: {$blur}px;
             --pmab-text-color: {$text_color};
+            --pmab-label-color: {$label_color};
             --pmab-active-color: {$active_color};
         }";
 
@@ -156,10 +158,11 @@ class Pmab_Display
                     }
 
                     $active_class = $is_active ? 'active' : '';
+                    $item_index_class = 'pmab-item-' . $i;
 
-                    echo '<a href="' . esc_url($url_raw) . '" class="pmab-item ' . $active_class . '">';
+                    echo '<a href="' . esc_url($url_raw) . '" class="pmab-item ' . $active_class . ' ' . $item_index_class . '">';
                     echo '<span class="dashicons ' . esc_attr($icon) . '"></span>';
-                    echo '<span class="label">' . esc_html($label) . '</span>';
+                    echo '<span class="label" style="color: var(--pmab-label-color);">' . esc_html($label) . '</span>';
                     echo '</a>';
                 }
             }

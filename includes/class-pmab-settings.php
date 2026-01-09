@@ -11,8 +11,22 @@ class Pmab_Settings
 
     public function init()
     {
+        // Handle Reset Action
+        if (isset($_POST['pmab_reset']) && isset($_POST['pmab_reset_nonce'])) {
+            if (wp_verify_nonce($_POST['pmab_reset_nonce'], 'pmab_reset_action')) {
+                $this->reset_settings();
+                add_settings_error('pmab_messages', 'pmab_message', 'Settings reset to defaults.', 'updated');
+            }
+        }
+
         add_action('admin_init', [$this, 'register_settings']);
         add_action('admin_menu', [$this, 'add_admin_menu']);
+    }
+
+    private function reset_settings()
+    {
+        global $wpdb;
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE 'pmab_%'");
     }
 
     public function register_settings()
@@ -30,6 +44,7 @@ class Pmab_Settings
         // Design
         register_setting('pmab_settings_group', 'pmab_bg_color');
         register_setting('pmab_settings_group', 'pmab_text_color');
+        register_setting('pmab_settings_group', 'pmab_label_color'); // New Label Color
         register_setting('pmab_settings_group', 'pmab_active_color');
         register_setting('pmab_settings_group', 'pmab_blur_amount');
         register_setting('pmab_settings_group', 'pmab_opacity');
@@ -176,10 +191,18 @@ class Pmab_Settings
                     </div>
 
                     <div class="pmab-form-row">
-                        <div class="pmab-label">Icon Color</div>
                         <div class="pmab-input-group">
                             <input type="color" name="pmab_text_color"
                                 value="<?php echo esc_attr(get_option('pmab_text_color', '#9ca3af')); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Label Color</div>
+                        <div class="pmab-input-group">
+                            <input type="color" name="pmab_label_color"
+                                value="<?php echo esc_attr(get_option('pmab_label_color', '#9ca3af')); ?>" />
+                            <p class="pmab-help">Specific color for text labels.</p>
                         </div>
                     </div>
 
@@ -239,9 +262,17 @@ class Pmab_Settings
                 </div>
 
                 <div class="pmab-save-bar">
-                    <span>⚠️ Don't forget to save changes!</span>
                     <input type="submit" name="submit" id="submit" class="button" value="Save Settings">
                 </div>
+            </form>
+
+            <!-- Reset Form -->
+            <form method="post" action=""
+                style="margin-top: 30px; text-align: right; border-top: 1px solid #ddd; padding-top: 20px;">
+                <?php wp_nonce_field('pmab_reset_action', 'pmab_reset_nonce'); ?>
+                <span style="color: #666; margin-right: 10px;">Mess up? </span>
+                <input type="submit" name="pmab_reset" class="button button-link-delete" value="Reset to Factory Defaults"
+                    onclick="return confirm('Are you sure? This will clear all your settings.');">
             </form>
         </div>
         <?php
