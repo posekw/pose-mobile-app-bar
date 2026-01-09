@@ -19,7 +19,13 @@ class Pmab_Settings
     {
         register_setting('pmab_settings_group', 'pmab_enable');
         register_setting('pmab_settings_group', 'pmab_native_mode');
+        register_setting('pmab_settings_group', 'pmab_native_mode');
         register_setting('pmab_settings_group', 'pmab_hide_selectors');
+
+        // Accessibility / Visibility
+        register_setting('pmab_settings_group', 'pmab_hide_header');
+        register_setting('pmab_settings_group', 'pmab_hide_footer');
+        register_setting('pmab_settings_group', 'pmab_hide_header_bottom');
 
         // Design
         register_setting('pmab_settings_group', 'pmab_bg_color');
@@ -88,13 +94,39 @@ class Pmab_Settings
                         </div>
                     </div>
 
+                </div>
+
+                <!-- VISIBILITY SETTINGS -->
+                <div class="pmab-card">
+                    <div class="pmab-section-title">Visibility Controls</div>
+                    <p class="pmab-help">Check the elements you want to <b>HIDE</b> on mobile devices.</p>
+
                     <div class="pmab-form-row">
-                        <div class="pmab-label">Hide Selectors</div>
+                        <div class="pmab-label">Hide Standard Elements</div>
+                        <div class="pmab-input-group">
+                            <label class="switch" style="display:block; margin-bottom:10px;">
+                                <input type="checkbox" name="pmab_hide_header" value="1" <?php checked(1, get_option('pmab_hide_header'), true); ?> />
+                                <span style="margin-left: 10px;">Hide Main Header (Logo/Menu)</span>
+                            </label>
+
+                            <label class="switch" style="display:block; margin-bottom:10px;">
+                                <input type="checkbox" name="pmab_hide_header_bottom" value="1" <?php checked(1, get_option('pmab_hide_header_bottom'), true); ?> />
+                                <span style="margin-left: 10px;">Hide Header Bottom Row (Menu Bar)</span>
+                            </label>
+
+                            <label class="switch" style="display:block;">
+                                <input type="checkbox" name="pmab_hide_footer" value="1" <?php checked(1, get_option('pmab_hide_footer'), true); ?> />
+                                <span style="margin-left: 10px;">Hide Site Footer</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Advanced Selectors</div>
                         <div class="pmab-input-group">
                             <textarea name="pmab_hide_selectors" rows="2"
-                                placeholder=".site-header, .site-footer, #copyright"><?php echo esc_attr(get_option('pmab_hide_selectors', 'header, footer')); ?></textarea>
-                            <p class="pmab-help">CSS selectors to hide when Native Mode is ON. <b>Remove 'header' from here to
-                                    show the Logo.</b></p>
+                                placeholder=".custom-class, #element-id"><?php echo esc_attr(get_option('pmab_hide_selectors')); ?></textarea>
+                            <p class="pmab-help">Comma-separated CSS selectors to hide extra elements.</p>
                         </div>
                     </div>
                 </div>

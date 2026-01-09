@@ -60,18 +60,51 @@ class Pmab_Display
             --pmab-active-color: {$active_color};
         }";
 
-        // Handle selector hiding for Native Mode
-        $native_mode = get_option('pmab_native_mode');
-        if ($native_mode) {
-            $selectors = get_option('pmab_hide_selectors', 'header, footer');
-            // Clean up selecotrs
-            $selectors = trim($selectors);
-            if (!empty($selectors)) {
-                $custom_css .= "
-                 @media screen and (max-width: 768px) {
-                    {$selectors} { display: none !important; }
-                 }";
-            }
+        // Visibility Logic (Native Mode + Checkboxes)
+        $hide_selectors = [];
+
+        // 1. Native Mode (Legacy/Master Switch)
+        if (get_option('pmab_native_mode')) {
+            $hide_selectors[] = 'header';
+            $hide_selectors[] = 'footer';
+            $hide_selectors[] = '#copyright';
+        }
+
+        // 2. Specific Visibility Settings
+        if (get_option('pmab_hide_header')) {
+            $hide_selectors[] = 'header';
+            $hide_selectors[] = '.site-header';
+            $hide_selectors[] = '#masthead';
+            $hide_selectors[] = '[data-row="top"]';
+            $hide_selectors[] = '[data-row="middle"]';
+        }
+
+        if (get_option('pmab_hide_footer')) {
+            $hide_selectors[] = 'footer';
+            $hide_selectors[] = '.site-footer';
+            $hide_selectors[] = '#colophon';
+        }
+
+        if (get_option('pmab_hide_header_bottom')) {
+            $hide_selectors[] = '[class*="ct-header"] [data-row="bottom"]';
+            $hide_selectors[] = '.h-bottom'; // Common class
+        }
+
+        // 3. Custom Selectors
+        $custom_selectors_input = get_option('pmab_hide_selectors');
+        if (!empty($custom_selectors_input)) {
+            $hide_selectors[] = $custom_selectors_input;
+        }
+
+        // Generate CSS if we have selectors
+        if (!empty($hide_selectors)) {
+            // Flatten and unique
+            $final_selectors = implode(', ', array_unique($hide_selectors));
+
+            $custom_css .= "
+            @media screen and (max-width: 768px) {
+                {$final_selectors} { display: none !important; }
+            }";
         }
 
         wp_add_inline_style('pmab-frontend-css', $custom_css);
