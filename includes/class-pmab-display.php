@@ -64,6 +64,22 @@ class Pmab_Display
             --pmab-separator-color: {$separator_color};
         }";
 
+        // Convert separator color to RGB for opacity
+        $sep_hex = str_replace('#', '', $separator_color);
+        if (strlen($sep_hex) == 3) {
+            $sep_r = hexdec(substr($sep_hex, 0, 1) . substr($sep_hex, 0, 1));
+            $sep_g = hexdec(substr($sep_hex, 1, 1) . substr($sep_hex, 1, 1));
+            $sep_b = hexdec(substr($sep_hex, 2, 1) . substr($sep_hex, 2, 1));
+        } else {
+            $sep_r = hexdec(substr($sep_hex, 0, 2));
+            $sep_g = hexdec(substr($sep_hex, 2, 2));
+            $sep_b = hexdec(substr($sep_hex, 4, 2));
+        }
+        $custom_css .= "
+        :root {
+            --pmab-separator-rgb: {$sep_r}, {$sep_g}, {$sep_b};
+        }";
+
         // Label Color Logic
         $custom_css .= "
         .pmab-item .label {
@@ -75,9 +91,13 @@ class Pmab_Display
 
         // Separators Logic
         if (get_option('pmab_enable_separators')) {
+            $sep_width = get_option('pmab_separator_width', '1');
+            $sep_opacity = get_option('pmab_separator_opacity', '1');
+
             $custom_css .= "
             .pmab-item {
-                border-right: 1px solid var(--pmab-separator-color);
+                border-right: {$sep_width}px solid var(--pmab-separator-color);
+                border-right-color: rgba(var(--pmab-separator-rgb), {$sep_opacity});
             }
             .pmab-item:last-child {
                 border-right: none;

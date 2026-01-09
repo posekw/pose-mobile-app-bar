@@ -50,6 +50,8 @@ class Pmab_Settings
         // Separators
         register_setting('pmab_settings_group', 'pmab_enable_separators');
         register_setting('pmab_settings_group', 'pmab_separator_color');
+        register_setting('pmab_settings_group', 'pmab_separator_width');
+        register_setting('pmab_settings_group', 'pmab_separator_opacity');
 
         // Custom CSS
         register_setting('pmab_settings_group', 'pmab_custom_css');
@@ -225,13 +227,31 @@ class Pmab_Settings
                     <div class="pmab-form-row">
                         <div class="pmab-label">Separators</div>
                         <div class="pmab-input-group">
-                            <label class="switch" style="display:block; margin-bottom:5px;">
+                            <label class="switch" style="display:block; margin-bottom:10px;">
                                 <input type="checkbox" name="pmab_enable_separators" value="1" <?php checked(1, get_option('pmab_enable_separators'), true); ?> />
                                 <span style="margin-left: 10px;">Show dividers between items</span>
                             </label>
-                            <input type="color" name="pmab_separator_color"
-                                value="<?php echo esc_attr(get_option('pmab_separator_color', '#e5e7eb')); ?>"
-                                style="margin-top:5px;" />
+
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 12px;">Color</label>
+                                    <input type="color" name="pmab_separator_color"
+                                        value="<?php echo esc_attr(get_option('pmab_separator_color', '#e5e7eb')); ?>"
+                                        style="width: 100%;" />
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 12px;">Width (px)</label>
+                                    <input type="number" name="pmab_separator_width" min="1" max="5" step="1"
+                                        value="<?php echo esc_attr(get_option('pmab_separator_width', '1')); ?>"
+                                        style="width: 100%;" />
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 12px;">Opacity</label>
+                                    <input type="number" name="pmab_separator_opacity" min="0" max="1" step="0.1"
+                                        value="<?php echo esc_attr(get_option('pmab_separator_opacity', '1')); ?>"
+                                        style="width: 100%;" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
