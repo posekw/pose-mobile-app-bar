@@ -173,24 +173,14 @@ class Pmab_Settings
                     <div class="pmab-form-row">
                         <div class="pmab-label">Blur Amount</div>
                         <div class="pmab-input-group">
-                            <input type="range" name="pmab_blur_amount" min="0" max="20"
-                                value="<?php echo esc_attr(get_option('pmab_blur_amount', '10')); ?>"
+                            <input type="range" name="pmab_blur" min="0" max="20"
+                                value="<?php echo esc_attr(get_option('pmab_blur', '10')); ?>"
                                 oninput="this.nextElementSibling.value = this.value" />
-                            <output><?php echo esc_attr(get_option('pmab_blur_amount', '10')); ?></output>px
+                            <output><?php echo esc_attr(get_option('pmab_blur', '10')); ?></output>px
                             <p class="pmab-help">Controls the "Frosted Glass" effect intensity.</p>
                         </div>
                     </div>
 
-                    <div class="pmab-form-row">
-                        <div class="pmab-label">Glass Opacity</div>
-                        <div class="pmab-input-group">
-                            <input type="range" name="pmab_opacity" min="0.1" max="1.0" step="0.05"
-                                value="<?php echo esc_attr(get_option('pmab_opacity', '0.85')); ?>"
-                                oninput="this.nextElementSibling.value = Math.round(this.value * 100) + '%'" />
-                            <output><?php echo round(floatval(get_option('pmab_opacity', '0.85')) * 100); ?>%</output>
-                            <p class="pmab-help">Controls how transparent the background color is.</p>
-                        </div>
-                    </div>
 
                     <div class="pmab-form-row">
                         <div class="pmab-label">Bar Height</div>
@@ -219,10 +209,13 @@ class Pmab_Settings
                     </div>
 
                     <div class="pmab-form-row">
-                        <div class="pmab-label">Opacity (%)</div>
+                        <div class="pmab-label">Glass Opacity (%)</div>
                         <div class="pmab-input-group">
-                            <input type="number" name="pmab_bg_opacity" min="0" max="100" step="5"
-                                value="<?php echo esc_attr(get_option('pmab_bg_opacity', '85')); ?>" />
+                            <input type="range" name="pmab_bg_opacity" min="0" max="100" step="5"
+                                value="<?php echo esc_attr(get_option('pmab_bg_opacity', '85')); ?>"
+                                oninput="this.nextElementSibling.value = this.value + '%'" />
+                            <output><?php echo esc_attr(get_option('pmab_bg_opacity', '85')); ?>%</output>
+                            <p class="pmab-help">Controls how transparent the background color is (0-100%).</p>
                         </div>
                     </div>
 
