@@ -42,9 +42,12 @@ class Pmab_Settings
         register_setting('pmab_settings_group', 'pmab_hide_header_bottom');
 
         // Design
+        register_setting('pmab_settings_group', 'pmab_height');
         register_setting('pmab_settings_group', 'pmab_bg_color');
+        register_setting('pmab_settings_group', 'pmab_bg_opacity');
         register_setting('pmab_settings_group', 'pmab_text_color');
-        register_setting('pmab_settings_group', 'pmab_label_color'); // New Label Color
+        register_setting('pmab_settings_group', 'pmab_label_color');
+        register_setting('pmab_settings_group', 'pmab_icon_label_spacing');
         register_setting('pmab_settings_group', 'pmab_active_color');
 
         // Separators
@@ -58,14 +61,6 @@ class Pmab_Settings
 
         register_setting('pmab_settings_group', 'pmab_blur_amount');
         register_setting('pmab_settings_group', 'pmab_opacity');
-        register_setting('pmab_settings_group', 'pmab_height');
-
-        // Menu Items (1-5)
-        for ($i = 1; $i <= 5; $i++) {
-            register_setting('pmab_settings_group', "pmab_item_{$i}_icon");
-            register_setting('pmab_settings_group', "pmab_item_{$i}_label");
-            register_setting('pmab_settings_group', "pmab_item_{$i}_url");
-        }
     }
 
     public function add_admin_menu()
@@ -201,6 +196,7 @@ class Pmab_Settings
                     </div>
 
                     <div class="pmab-form-row">
+                        <div class="pmab-label">Text Color</div>
                         <div class="pmab-input-group">
                             <input type="color" name="pmab_text_color"
                                 value="<?php echo esc_attr(get_option('pmab_text_color', '#9ca3af')); ?>" />
@@ -213,6 +209,25 @@ class Pmab_Settings
                             <input type="color" name="pmab_label_color"
                                 value="<?php echo esc_attr(get_option('pmab_label_color', '#9ca3af')); ?>" />
                             <p class="pmab-help">Specific color for text labels.</p>
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Opacity (%)</div>
+                        <div class="pmab-input-group">
+                            <input type="number" name="pmab_bg_opacity" min="0" max="100" step="5"
+                                value="<?php echo esc_attr(get_option('pmab_bg_opacity', '85')); ?>" />
+                        </div>
+                    </div>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-label">Icon-Label Spacing (px)</div>
+                        <div class="pmab-input-group">
+                            <input type="number" name="pmab_icon_label_spacing" min="0" max="10" step="1"
+                                value="<?php echo esc_attr(get_option('pmab_icon_label_spacing', '0')); ?>"
+                                style="width: 80px;" />
+                            <small style="display: block; margin-top: 5px; color: #666;">Distance between icon and text
+                                (0-10px)</small>
                         </div>
                     </div>
 

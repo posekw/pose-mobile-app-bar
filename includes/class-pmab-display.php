@@ -31,16 +31,16 @@ class Pmab_Display
 
     private function inject_dynamic_css()
     {
-        $text_color = get_option('pmab_text_color', '#9ca3af');
-        $label_color = get_option('pmab_label_color', $text_color); // Fallback to text_color
-        $active_color = get_option('pmab_active_color', '#2563eb');
-        $separator_color = get_option('pmab_separator_color', '#e5e7eb');
-        $blur = get_option('pmab_blur_amount', '10');
-        $opacity = get_option('pmab_opacity', '0.85');
-        $height = get_option('pmab_height', '65');
-
-        // Calc RGBA
         $bg_color = get_option('pmab_bg_color', '#ffffff');
+        $bg_opacity = get_option('pmab_bg_opacity', 85) / 100;
+        $text_color = get_option('pmab_text_color', '#9ca3af');
+        $active_color = get_option('pmab_active_color', '#2563eb');
+        $blur = get_option('pmab_blur', 10);
+        $height = get_option('pmab_height', 65);
+        $label_color = get_option('pmab_label_color', $text_color);
+        $icon_label_spacing = get_option('pmab_icon_label_spacing', '0');
+
+        $separator_color = get_option('pmab_separator_color', '#e5e7eb');
         $hex = str_replace('#', '', $bg_color);
         if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
@@ -51,7 +51,7 @@ class Pmab_Display
             $g = hexdec(substr($hex, 2, 2));
             $b = hexdec(substr($hex, 4, 2));
         }
-        $rgba_bg = "rgba($r, $g, $b, $opacity)";
+        $rgba_bg = "rgba($r, $g, $b, $bg_opacity)";
 
         $custom_css = "
         :root {
@@ -62,6 +62,13 @@ class Pmab_Display
             --pmab-label-color: {$label_color};
             --pmab-active-color: {$active_color};
             --pmab-separator-color: {$separator_color};
+            --pmab-icon-label-spacing: {$icon_label_spacing}px;
+        }";
+
+        // Icon-Label Spacing
+        $custom_css .= "
+        .pmab-item span.dashicons {
+            margin-bottom: var(--pmab-icon-label-spacing);
         }";
 
         // Convert separator color to RGB for opacity
