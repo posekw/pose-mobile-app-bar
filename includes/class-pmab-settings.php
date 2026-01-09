@@ -80,10 +80,12 @@ class Pmab_Settings
 
     public function render_settings_page()
     {
-        // Enqueue admin styles just for this page. 
-        // Ideally we would use wp_enqueue_style on 'admin_enqueue_scripts' hook with a page check.
-        // But keeping it simple for now, we will link it or inline read it.
-        // Better practice: separate proper enqueue.
+        // Security check: only render on our settings page
+        $screen = get_current_screen();
+        if (!$screen || $screen->id !== 'settings_page_pose-mobile-app-bar') {
+            return;
+        }
+
         wp_enqueue_style('pmab-admin-css', plugins_url('../assets/css/admin.css', __FILE__));
 
         ?>
@@ -92,7 +94,7 @@ class Pmab_Settings
                 <?php settings_fields('pmab_settings_group'); ?>
 
                 <div class="pmab-header">
-                    <h1>📱 Mobile App Bar <span class="pmab-badge">v3.1</span></h1>
+                    <h1>📱 Mobile App Bar <span class="pmab-badge">v<?php echo esc_html(PMAB_VERSION); ?></span></h1>
                 </div>
 
                 <!-- GENERAL SETTINGS -->
