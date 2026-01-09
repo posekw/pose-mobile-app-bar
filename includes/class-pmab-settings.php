@@ -46,10 +46,13 @@ class Pmab_Settings
         register_setting('pmab_settings_group', 'pmab_text_color');
         register_setting('pmab_settings_group', 'pmab_label_color'); // New Label Color
         register_setting('pmab_settings_group', 'pmab_active_color');
-        
+
         // Separators
         register_setting('pmab_settings_group', 'pmab_enable_separators');
         register_setting('pmab_settings_group', 'pmab_separator_color');
+
+        // Custom CSS
+        register_setting('pmab_settings_group', 'pmab_custom_css');
 
         register_setting('pmab_settings_group', 'pmab_blur_amount');
         register_setting('pmab_settings_group', 'pmab_opacity');
@@ -222,13 +225,27 @@ class Pmab_Settings
                     <div class="pmab-form-row">
                         <div class="pmab-label">Separators</div>
                         <div class="pmab-input-group">
-                             <label class="switch" style="display:block; margin-bottom:5px;">
+                            <label class="switch" style="display:block; margin-bottom:5px;">
                                 <input type="checkbox" name="pmab_enable_separators" value="1" <?php checked(1, get_option('pmab_enable_separators'), true); ?> />
                                 <span style="margin-left: 10px;">Show dividers between items</span>
                             </label>
                             <input type="color" name="pmab_separator_color"
-                                value="<?php echo esc_attr(get_option('pmab_separator_color', '#e5e7eb')); ?>" 
-                                style="margin-top:5px;"/>
+                                value="<?php echo esc_attr(get_option('pmab_separator_color', '#e5e7eb')); ?>"
+                                style="margin-top:5px;" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUSTOM CSS -->
+                <div class="pmab-card">
+                    <div class="pmab-section-title">Custom CSS</div>
+                    <p class="pmab-help">Add your own CSS rules to customize specific elements (e.g., static Gallery button
+                        color).</p>
+
+                    <div class="pmab-form-row">
+                        <div class="pmab-input-group">
+                            <textarea name="pmab_custom_css" rows="8" style="font-family: monospace; width: 100%;"
+                                placeholder=".pmab-item-2 { color: #ff0055 !important; }"><?php echo esc_textarea(get_option('pmab_custom_css')); ?></textarea>
                         </div>
                     </div>
                 </div>

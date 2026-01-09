@@ -64,6 +64,15 @@ class Pmab_Display
             --pmab-separator-color: {$separator_color};
         }";
 
+        // Label Color Logic
+        $custom_css .= "
+        .pmab-item .label {
+            color: var(--pmab-label-color);
+        }
+        .pmab-item.active .label {
+            color: var(--pmab-active-color);
+        }";
+
         // Separators Logic
         if (get_option('pmab_enable_separators')) {
             $custom_css .= "
@@ -122,6 +131,12 @@ class Pmab_Display
             }";
         }
 
+        // Custom CSS
+        $user_custom_css = get_option('pmab_custom_css');
+        if (!empty($user_custom_css)) {
+            $custom_css .= "\n" . $user_custom_css;
+        }
+
         wp_add_inline_style('pmab-frontend-css', $custom_css);
     }
 
@@ -175,7 +190,7 @@ class Pmab_Display
 
                     echo '<a href="' . esc_url($url_raw) . '" class="pmab-item ' . $active_class . ' ' . $item_index_class . '">';
                     echo '<span class="dashicons ' . esc_attr($icon) . '"></span>';
-                    echo '<span class="label" style="color: var(--pmab-label-color);">' . esc_html($label) . '</span>';
+                    echo '<span class="label">' . esc_html($label) . '</span>';
                     echo '</a>';
                 }
             }
