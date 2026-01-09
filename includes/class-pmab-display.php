@@ -172,10 +172,12 @@ class Pmab_Display
             <?php
             global $wp;
             $current_url = home_url(add_query_arg([], $wp->request));
-            $current_path = parse_url($current_url, PHP_URL_PATH);
-            if ($current_path == '')
+            $current_path = '/' . trim($wp->request, '/');
+            if ($current_path == '/')
                 $current_path = '/';
-
+            else
+                $current_path = rtrim($current_path, '/'); // Remove trailing slash for comparison
+    
             // Handling home path specifically
             $is_home = (is_front_page() || is_home());
 
@@ -185,24 +187,28 @@ class Pmab_Display
                 $icon = get_option("pmab_item_{$i}_icon");
 
                 if (!empty($label) && !empty($url_raw)) {
-                    // Normalize URL for comparison
-                    $item_path = parse_url($url_raw, PHP_URL_PATH);
-                    if (!$item_path)
-                        $item_path = $url_raw; // Fallback if full URL not provided
-    
                     $is_active = false;
 
-                    // 1. Exact Match
-                    if ($url_raw == $current_url || $item_path == $current_path) {
+                    // Normalize the menu item URL
+                    $item_url_parsed = parse_url($url_raw);
+                    $item_path = isset($item_url_parsed['path']) ? rtrim($item_url_parsed['path'], '/') : '';
+
+                    // If empty path, treat as home
+                    if (empty($item_path)) {
+                        $item_path = '/';
+                    }
+
+                    // 1. Check if it's the home page
+                    if ($is_home && ($item_path == '/' || $url_raw == '/' || $url_raw == home_url('/'))) {
                         $is_active = true;
                     }
-                    // 2. Front Page Exception
-                    if ($is_home && ($url_raw == '/' || $url_raw == home_url('/'))) {
+                    // 2. Check for exact path match (for non-home pages)
+                    elseif (!$is_home && $item_path != '/' && $current_path == $item_path) {
                         $is_active = true;
                     }
-                    // 3. Make sure non-home links don't light up on home
-                    if ($is_home && $url_raw != '/' && $url_raw != home_url('/')) {
-                        $is_active = false;
+                    // 3. Fallback: check if current URL contains the item path (for complex URLs)
+                    elseif (!$is_home && $item_path != '/' && strpos($current_path, $item_path) === 0) {
+                        $is_active = true;
                     }
 
                     $active_class = $is_active ? 'active' : '';
@@ -215,7 +221,7 @@ class Pmab_Display
                 }
             }
             ?>
-        </div>
-        <?php
+                </div>
+                <?php
     }
 }
