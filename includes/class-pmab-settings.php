@@ -59,8 +59,12 @@ class Pmab_Settings
         // Custom CSS
         register_setting('pmab_settings_group', 'pmab_custom_css');
 
-        register_setting('pmab_settings_group', 'pmab_blur_amount');
-        register_setting('pmab_settings_group', 'pmab_opacity');
+        // Menu Items (1-5)
+        for ($i = 1; $i <= 5; $i++) {
+            register_setting('pmab_settings_group', "pmab_item_{$i}_icon");
+            register_setting('pmab_settings_group', "pmab_item_{$i}_label");
+            register_setting('pmab_settings_group', "pmab_item_{$i}_url");
+        }
     }
 
     public function add_admin_menu()
